@@ -1,36 +1,79 @@
-import type { Unsubscribe } from 'firebase/firestore';
+import type { DocumentSnapshot, Unsubscribe } from 'firebase/firestore';
 import {
   addDoc,
   collection,
   deleteDoc,
   doc,
+  endBefore,
+  getCountFromServer,
   getDoc,
   getDocs,
+  limit,
+  limitToLast,
   onSnapshot,
   orderBy,
   query,
+  startAfter,
   updateDoc,
   where,
 } from 'firebase/firestore';
 import type { Dispatch, SetStateAction } from 'react';
 
-import type { SortEnum, UserForAddType, UserType } from '@/types/types';
+import { COUNT_USERS_ON_PAGE } from '@/constants/constants';
+import type { UserForAddType, UserForUpdateType, UserType } from '@/types/types';
+import { SortEnum } from '@/types/types';
+import { PageDirection } from '@/types/types';
 import db from '@/utils/firestore';
 import { buildUser, buildUsers } from '@/utils/helpers';
 
-const getUsers = async (): Promise<UserType[]> => {
+const getUsers = async (): Promise<[UserType[], string]> => {
   const collectionRef = collection(db, 'users');
-  const data = await getDocs(collectionRef);
+  const q = query(collectionRef, orderBy('createdAt', SortEnum.ASC), limit(COUNT_USERS_ON_PAGE));
+  const data = await getDocs(q);
   const users = buildUsers(data.docs);
+  const lastUserID = data.docs[COUNT_USERS_ON_PAGE - 1].id;
+  return [users, lastUserID];
+};
 
-  return users;
+const getCurrentPage = async (
+  direction: PageDirection | undefined,
+  startAfterDoc?: DocumentSnapshot,
+  endBeforeDoc?: DocumentSnapshot,
+): Promise<{ result: UserType[]; lastDoc: DocumentSnapshot; firstDoc: DocumentSnapshot }> => {
+  const collectionRef = collection(db, 'users');
+  let dataQuery = query(collectionRef, orderBy('createdAt', SortEnum.ASC), limit(COUNT_USERS_ON_PAGE));
+
+  if (direction === PageDirection.NEXT && startAfterDoc) {
+    dataQuery = query(dataQuery, startAfter(startAfterDoc));
+  } else if (direction === PageDirection.PREV && endBeforeDoc) {
+    dataQuery = query(
+      collectionRef,
+      orderBy('createdAt', SortEnum.ASC),
+      endBefore(endBeforeDoc),
+      limitToLast(COUNT_USERS_ON_PAGE),
+    );
+  }
+
+  const productsSnapshot = await getDocs(dataQuery);
+  const products = buildUsers(productsSnapshot.docs);
+  return {
+    result: products as UserType[],
+    lastDoc: productsSnapshot.docs[productsSnapshot.docs.length - 1],
+    firstDoc: productsSnapshot.docs[0],
+  };
+};
+
+const getCountUsers = async (): Promise<number> => {
+  const collectionRef = collection(db, 'users');
+  const data = await getCountFromServer(collectionRef);
+  return Math.ceil(data.data().count / COUNT_USERS_ON_PAGE);
 };
 
 const getSortUsers = async (type: SortEnum): Promise<UserType[]> => {
   const collectionRef = collection(db, 'users');
   const q = query(collectionRef, orderBy('createdAt', type));
   const data = await getDocs(q);
-  console.log(data);
+
   return buildUsers(data.docs);
 };
 
@@ -52,7 +95,14 @@ const getCurrentUser = async (userId: string): Promise<UserType | null> => {
   }
 };
 
-const getSearchUsers = async (search: string): Promise<UserType[]> => {
+const getCurrentUserDoc = async (userId: string): Promise<DocumentSnapshot> => {
+  const userRef = doc(db, 'users', userId);
+  const data = await getDoc(userRef);
+
+  return data;
+};
+
+const getSearchUsers = async (search: string): Promise<[UserType[]] | [UserType[], string]> => {
   if (!search) {
     return getUsers();
   }
@@ -61,7 +111,7 @@ const getSearchUsers = async (search: string): Promise<UserType[]> => {
   const data = await getDocs(q);
   const users = buildUsers(data.docs);
 
-  return users;
+  return [users];
 };
 
 const addUser = async (user: UserForAddType): Promise<void> => {
@@ -75,16 +125,25 @@ const deleteUser = async (userId: string): Promise<void> => {
 };
 
 const updateUsers = (setState: Dispatch<SetStateAction<UserType[]>>): Unsubscribe => {
+  let isInitialLoad = true;
+
   const collectionRef = collection(db, 'users');
-  const unsubscribe = onSnapshot(collectionRef, (snapshot) => {
-    const users = buildUsers(snapshot.docs);
-    setState(users);
+  const dataQuery = query(collectionRef, orderBy('createdAt', SortEnum.ASC), limit(COUNT_USERS_ON_PAGE));
+  const unsubscribe = onSnapshot(dataQuery, (snapshot) => {
+    if (!snapshot.metadata.hasPendingWrites) {
+      const users = buildUsers(snapshot.docs);
+
+      if (!isInitialLoad) {
+        setState(users);
+      }
+      isInitialLoad = false;
+    }
   });
 
   return unsubscribe;
 };
 
-const updateUser = async (user: UserForAddType, userID: string): Promise<void> => {
+const updateUser = async (user: UserForUpdateType, userID: string): Promise<void> => {
   const userRef = doc(db, 'users', userID);
 
   try {
@@ -98,7 +157,9 @@ const updateUser = async (user: UserForAddType, userID: string): Promise<void> =
 
 export {
   getUsers,
+  getCountUsers,
   addUser,
+  getCurrentPage,
   deleteUser,
   updateUsers,
   getQueryUser,
@@ -106,4 +167,5 @@ export {
   getSearchUsers,
   updateUser,
   getSortUsers,
+  getCurrentUserDoc,
 };

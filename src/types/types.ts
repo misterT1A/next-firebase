@@ -1,4 +1,4 @@
-import type { FieldValue } from '@firebase/firestore';
+import type { DocumentSnapshot, FieldValue } from '@firebase/firestore';
 
 export type UserType = {
   id: string;
@@ -8,11 +8,23 @@ export type UserType = {
   time: string;
 };
 
-export type UserForAddType = Omit<UserType, 'id' | 'time'> & { createdAt: FieldValue };
+export type UserForUpdateType = Omit<UserType, 'id' | 'time'>;
+export type UserForAddType = UserForUpdateType & { createdAt: FieldValue };
 
 export type ParamsPage = { slug: string };
 
 export enum SortEnum {
   ASC = 'asc',
   DESC = 'desc',
+}
+
+export enum PageDirection {
+  NEXT = 'next',
+  PREV = 'prev',
+}
+
+export interface ICurrentPageProps {
+  result: UserType[];
+  lastDoc: DocumentSnapshot;
+  firstDoc: DocumentSnapshot;
 }
