@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useState, type ReactElement } from 'react';
 
 import { updateUsers } from '@/services/firebaseServerActions';
@@ -27,6 +28,9 @@ const List = ({ data }: { data: UserType[] }): ReactElement => {
               <p>Age: {user.age}</p>
               <p>Description: {user.description}</p>
               <DeleteItem id={user.id} />
+              <Link href={`/edit/${user.id}`} className="rounded border bg-blue-400 p-1 text-white hover:bg-blue-900">
+                Edit
+              </Link>
             </li>
           ))}
       </ul>

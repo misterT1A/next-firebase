@@ -6,3 +6,5 @@ export type UserType = {
 };
 
 export type UserForAddType = Omit<UserType, 'id'>;
+
+export type ParamsPage = { slug: string };

@@ -3,8 +3,8 @@ import type { ReactElement } from 'react';
 import { getUsers } from '@/services/firebaseServerActions';
 import type { UserType } from '@/types/types';
 
-import Form from './components/Form/Form';
-import List from './components/List/List';
+import Form from '../components/Form/Form';
+import List from '../components/List/List';
 
 const initializeData = (): Promise<UserType[]> => {
   const users = getUsers();
