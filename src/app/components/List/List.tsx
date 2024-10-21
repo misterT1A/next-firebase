@@ -1,48 +1,34 @@
 'use client';
 
-import { collection, getDocs, onSnapshot } from 'firebase/firestore';
-import type { ReactElement } from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactElement } from 'react';
 
-import db from '../../utils/firestore';
+import { updateUsers } from '@/services/firebaseServerActions';
+import type { UserType } from '@/types/types';
+
 import DeleteItem from '../DeleteItem/DeleteItem';
 
-type Data = { id: string; name: string };
-
-const List = (): ReactElement => {
-  const [items, setItems] = useState<Data[]>([]);
+const List = ({ data }: { data: UserType[] }): ReactElement => {
+  const [users, setUsers] = useState<UserType[]>(data);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, 'items'), (snapshot) => {
-      const updatedData = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setItems(updatedData as Data[]);
-    });
+    const unsubscribe = updateUsers(setUsers);
 
     return (): void => unsubscribe();
   }, []);
 
-  useEffect(() => {
-    const fetchItems = async (): Promise<void> => {
-      const querySnapshot = await getDocs(collection(db, 'items'));
-      setItems(querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }) as Data));
-    };
-
-    fetchItems();
-  }, []);
-
   return (
-    <div className="w-96 border p-4 text-center">
-      <h2>List of Items</h2>
-      <ul>
-        {items.map((item) => (
-          <li key={item.id} className="border-t-2 p-2">
-            <p>{item.name}</p>
-            <DeleteItem id={item.id} />
-          </li>
-        ))}
+    <div className="w-96 rounded-md border bg-slate-50 p-4">
+      <h2 className="text-center font-bold text-black">List of Users</h2>
+      <ul className="max-h-[600px] overflow-y-auto">
+        {!!users.length &&
+          users.map((user) => (
+            <li key={user.id} className="rounded-md border-t-2 bg-slate-400 p-2 text-left">
+              <p>Name: {user.name}</p>
+              <p>Age: {user.age}</p>
+              <p>Description: {user.description}</p>
+              <DeleteItem id={user.id} />
+            </li>
+          ))}
       </ul>
     </div>
   );
