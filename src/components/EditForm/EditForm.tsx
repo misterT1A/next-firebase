@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import type { FormEvent, ReactElement } from 'react';
 import { useState } from 'react';
@@ -49,8 +50,11 @@ const EditForm = ({ initData }: { initData: UserType }): ReactElement => {
         placeholder="description"
       />
       <button type="submit" className="w-1/3 rounded-md border p-2 hover:bg-slate-600">
-        submit
+        Change
       </button>
+      <Link href={'/'} className="w-1/3 rounded-md border p-2 text-center hover:bg-slate-600">
+        Return
+      </Link>
     </form>
   );
 };

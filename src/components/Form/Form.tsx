@@ -1,5 +1,6 @@
 'use client';
 
+import { serverTimestamp } from '@firebase/firestore';
 import type { FormEvent, ReactElement } from 'react';
 import { useState } from 'react';
 
@@ -12,7 +13,12 @@ const Form = (): ReactElement => {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
-    const user = { name: nameValue, age: ageValue, description: descriptionValue };
+    const user = {
+      name: nameValue.toLowerCase(),
+      age: ageValue,
+      description: descriptionValue.toLowerCase(),
+      createdAt: serverTimestamp(),
+    };
 
     try {
       await addUser(user);

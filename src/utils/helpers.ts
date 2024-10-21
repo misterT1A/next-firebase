@@ -5,7 +5,13 @@ import type { UserType } from '@/types/types';
 const buildUsers = (data: QueryDocumentSnapshot<DocumentData, DocumentData>[]): UserType[] => {
   return data.map(
     (user) =>
-      ({ name: user.data().name, age: user.data().age, description: user.data().description, id: user.id }) as UserType,
+      ({
+        name: user.data().name,
+        age: user.data().age,
+        description: user.data().description,
+        id: user.id,
+        time: user.data().createdAt.toDate().toLocaleString('ru-RU'),
+      }) as UserType,
   );
 };
 

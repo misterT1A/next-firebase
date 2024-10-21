@@ -7,13 +7,14 @@ import {
   getDoc,
   getDocs,
   onSnapshot,
+  orderBy,
   query,
   updateDoc,
   where,
 } from 'firebase/firestore';
 import type { Dispatch, SetStateAction } from 'react';
 
-import type { UserForAddType, UserType } from '@/types/types';
+import type { SortEnum, UserForAddType, UserType } from '@/types/types';
 import db from '@/utils/firestore';
 import { buildUser, buildUsers } from '@/utils/helpers';
 
@@ -23,6 +24,14 @@ const getUsers = async (): Promise<UserType[]> => {
   const users = buildUsers(data.docs);
 
   return users;
+};
+
+const getSortUsers = async (type: SortEnum): Promise<UserType[]> => {
+  const collectionRef = collection(db, 'users');
+  const q = query(collectionRef, orderBy('createdAt', type));
+  const data = await getDocs(q);
+  console.log(data);
+  return buildUsers(data.docs);
 };
 
 const getQueryUser = async (): Promise<void> => {
@@ -41,6 +50,18 @@ const getCurrentUser = async (userId: string): Promise<UserType | null> => {
     console.log('No such user!');
     return null;
   }
+};
+
+const getSearchUsers = async (search: string): Promise<UserType[]> => {
+  if (!search) {
+    return getUsers();
+  }
+  const collectionRef = collection(db, 'users');
+  const q = query(collectionRef, where('name', '>=', search), where('name', '<=', search + '\uf8ff'));
+  const data = await getDocs(q);
+  const users = buildUsers(data.docs);
+
+  return users;
 };
 
 const addUser = async (user: UserForAddType): Promise<void> => {
@@ -75,4 +96,14 @@ const updateUser = async (user: UserForAddType, userID: string): Promise<void> =
   }
 };
 
-export { getUsers, addUser, deleteUser, updateUsers, getQueryUser, getCurrentUser, updateUser };
+export {
+  getUsers,
+  addUser,
+  deleteUser,
+  updateUsers,
+  getQueryUser,
+  getCurrentUser,
+  getSearchUsers,
+  updateUser,
+  getSortUsers,
+};
