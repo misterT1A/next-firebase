@@ -1,6 +1,5 @@
 'use client';
 
-import { Button } from '@mui/material';
 import { type ReactElement } from 'react';
 
 // import type { UserType } from '@/types/types';
@@ -17,7 +16,6 @@ const Home = (): ReactElement => {
 
   return (
     <aside className="flex gap-3">
-      <Button variant="contained">Text</Button>
       <h1>Home Page</h1>
       {/* <section className="flex w-2/3 flex-col items-center">
         <List data={users} lastUserID={lastUserID} />

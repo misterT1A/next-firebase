@@ -3,10 +3,9 @@
 import { useRouter } from 'next/navigation';
 import type { FormEvent, ReactElement } from 'react';
 import { useState } from 'react';
-import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 
+import { signUp } from '@/services/firebaseAuth';
 import type { ISignUpValErr } from '@/types/types';
-import { auth } from '@/utils/firebaseConfig';
 
 const SignUp = (): ReactElement => {
   const [email, setEmail] = useState('');
@@ -14,8 +13,6 @@ const SignUp = (): ReactElement => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState({ email: '', password: '', confirmPassword: '' });
   const router = useRouter();
-
-  const [createUserWithEmailAndPassword] = useCreateUserWithEmailAndPassword(auth);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
@@ -35,7 +32,7 @@ const SignUp = (): ReactElement => {
 
     if (Object.keys(validationErrors).length === 0) {
       try {
-        const res = await createUserWithEmailAndPassword(email, password);
+        const res = await signUp(email, password, 'Name');
         console.log(res);
         setEmail('');
         setPassword('');

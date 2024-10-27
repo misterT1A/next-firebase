@@ -12,6 +12,7 @@
     "@emotion/cache": "^11.13.1",
     "@emotion/styled": "^11.13.0",
     "@firebase/firestore": "^4.7.3",
+    "@mui/icons-material": "^6.1.5",
     "@mui/material": "^6.1.5",
     "@mui/material-nextjs": "^6.1.5",
     "firebase": "^10.14.1",

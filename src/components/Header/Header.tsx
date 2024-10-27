@@ -1,52 +1,103 @@
 'use client';
 
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { type ReactElement } from 'react';
+import MenuIcon from '@mui/icons-material/Menu';
+import {
+  AppBar,
+  Box,
+  Button,
+  CssBaseline,
+  Drawer,
+  IconButton,
+  Slide,
+  Toolbar,
+  Typography,
+  useScrollTrigger,
+} from '@mui/material';
+import { useState, type ReactElement } from 'react';
 
-import { useAuth } from '@/contexts/AuthContext';
-import { signOut } from '@/services/firebaseAuth';
+import { NAV_ITEMS } from '@/constants/constants';
 
+import DrowerList from './Drower';
+import ProfileIcon from './ProfileIcon';
 
-const Header = (): ReactElement => {
-  const { user, setIsSignOut } = useAuth();
-  const router = useRouter();
+const drawerWidth = 240;
 
-  const handleSignOut = async (): Promise<void> => {
-    setIsSignOut(true);
-    await signOut();
-    router.replace('/');
-    router.refresh();
+interface IProps {
+  children?: ReactElement;
+}
+
+function HideOnScroll(props: IProps): ReactElement {
+  const { children } = props;
+  const trigger = useScrollTrigger();
+
+  return (
+    <Slide appear={false} direction="down" in={!trigger}>
+      {children ?? <div />}
+    </Slide>
+  );
+}
+
+const Header = (props: IProps): ReactElement => {
+  const [mobileOpen, setMobileOpen] = useState(false);
+  //   if (
+  //     (event.type === 'keydown' && (event as KeyboardEvent).key === 'Tab') ||
+  //     (event as KeyboardEvent).key === 'Shift'
+  //   ) {
+  //     return;
+  //   }
+  //   setDrawerOpen(open);
+  // };
+
+  const handleDrawerToggle = (): void => {
+    setMobileOpen((prevState) => !prevState);
   };
 
   return (
-    <header className="flex w-full items-center justify-between rounded-lg bg-slate-200 p-2">
-      <Link href={'/'} className="w-fit rounded-lg bg-red-400 p-2 text-lg hover:bg-red-700">
-        Main
-      </Link>
-
-      <nav>
-        {user && (
-          <button onClick={handleSignOut} className="text-orange-700 hover:text-orange-900">
-            Log out
-          </button>
-        )}
-        {!user && (
-          <ul className="flex gap-3">
-            <li>
-              <Link className="text-orange-700 hover:text-orange-900" href={'/sign-in'}>
-                SignIn
-              </Link>
-            </li>
-            <li>
-              <Link className="text-orange-700 hover:text-orange-900" href={'/sign-up'}>
-                SignUp
-              </Link>
-            </li>
-          </ul>
-        )}
-      </nav>
-    </header>
+    <>
+      <CssBaseline />
+      <HideOnScroll {...props}>
+        <AppBar>
+          <Toolbar sx={{ width: { sm: '100%' }, display: 'flex', justifyContent: 'space-between' }}>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2, display: { sm: 'none' } }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}>
+              MUI
+            </Typography>
+            <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+              {NAV_ITEMS.map((item) => (
+                <Button key={item.title} sx={{ color: '#fff', ':hover': { color: '#000000' } }} href={item.href}>
+                  {item.title}
+                </Button>
+              ))}
+            </Box>
+            <ProfileIcon />
+          </Toolbar>
+          <nav>
+            <Drawer
+              variant="temporary"
+              open={mobileOpen}
+              onClose={handleDrawerToggle}
+              ModalProps={{
+                keepMounted: true,
+              }}
+              sx={{
+                display: { xs: 'block', sm: 'none' },
+                '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+              }}
+            >
+              <DrowerList handleDrawerToggle={handleDrawerToggle} />
+            </Drawer>
+          </nav>
+        </AppBar>
+      </HideOnScroll>
+    </>
   );
 };
 
