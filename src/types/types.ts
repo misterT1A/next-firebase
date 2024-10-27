@@ -28,3 +28,12 @@ export interface ICurrentPageProps {
   lastDoc: DocumentSnapshot;
   firstDoc: DocumentSnapshot;
 }
+
+export interface ISignInValErr {
+  email: string;
+  password: string;
+}
+
+export interface ISignUpValErr extends ISignInValErr {
+  confirmPassword: string;
+}
