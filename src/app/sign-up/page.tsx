@@ -48,47 +48,52 @@ const SignUp = (): ReactElement => {
   };
 
   return (
-    <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">
-      <h2 className="mb-6 text-center text-2xl font-bold text-gray-700">Sign Up</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label className="block text-gray-700">Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="mt-2 w-full rounded border border-gray-300 p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
-        </div>
+    <section className="flex w-full flex-col items-center justify-center">
+      <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">
+        <h2 className="mb-6 text-center text-2xl font-bold text-gray-700">Sign Up</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label className="block text-gray-700">Email:</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="mt-2 w-full rounded border border-gray-300 p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
+          </div>
 
-        <div className="mb-4">
-          <label className="block text-gray-700">Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="mt-2 w-full rounded border border-gray-300 p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password}</p>}
-        </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Password:</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="mt-2 w-full rounded border border-gray-300 p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password}</p>}
+          </div>
 
-        <div className="mb-4">
-          <label className="block text-gray-700">Confirm Password:</label>
-          <input
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            className="mt-2 w-full rounded border border-gray-300 p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          {errors.confirmPassword && <p className="mt-1 text-sm text-red-500">{errors.confirmPassword}</p>}
-        </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Confirm Password:</label>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className="mt-2 w-full rounded border border-gray-300 p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            {errors.confirmPassword && <p className="mt-1 text-sm text-red-500">{errors.confirmPassword}</p>}
+          </div>
 
-        <button type="submit" className="w-full rounded bg-blue-500 p-2 text-white transition-colors hover:bg-blue-600">
-          Sign Up
-        </button>
-      </form>
-    </div>
+          <button
+            type="submit"
+            className="w-full rounded bg-blue-500 p-2 text-white transition-colors hover:bg-blue-600"
+          >
+            Sign Up
+          </button>
+        </form>
+      </div>
+    </section>
   );
 };
 

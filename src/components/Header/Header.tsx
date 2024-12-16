@@ -1,18 +1,7 @@
 'use client';
 
 import MenuIcon from '@mui/icons-material/Menu';
-import {
-  AppBar,
-  Box,
-  Button,
-  CssBaseline,
-  Drawer,
-  IconButton,
-  Slide,
-  Toolbar,
-  Typography,
-  useScrollTrigger,
-} from '@mui/material';
+import { AppBar, Box, Button, Drawer, IconButton, Slide, Toolbar, Typography, useScrollTrigger } from '@mui/material';
 import { useState, type ReactElement } from 'react';
 
 import { NAV_ITEMS } from '@/constants/constants';
@@ -54,7 +43,6 @@ const Header = (props: IProps): ReactElement => {
 
   return (
     <>
-      <CssBaseline />
       <HideOnScroll {...props}>
         <AppBar>
           <Toolbar sx={{ width: { sm: '100%' }, display: 'flex', justifyContent: 'space-between' }}>

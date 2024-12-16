@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import localFont from 'next/font/local';
 import './globals.css';
+import { Roboto } from 'next/font/google';
 import type { ReactElement } from 'react';
 
 import Header from '@/components/Header/Header';
@@ -8,15 +8,9 @@ import { getUserFromCookie } from '@/utils/getUserFromCookie';
 
 import Providers from './providers';
 
-const geistSans = localFont({
-  src: './fonts/GeistVF.woff',
-  variable: '--font-geist-sans',
-  weight: '100 900',
-});
-const geistMono = localFont({
-  src: './fonts/GeistMonoVF.woff',
-  variable: '--font-geist-mono',
-  weight: '100 900',
+const roboto = Roboto({
+  weight: ['400'],
+  subsets: ['latin'],
 });
 
 export const metadata: Metadata = {
@@ -32,12 +26,10 @@ export default async function RootLayout({
   const user = await getUserFromCookie();
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} m-auto mt-2 flex min-h-screen max-w-5xl flex-col antialiased`}
-      >
+      <body className={`${roboto.className} m-auto flex min-h-screen max-w-5xl flex-col pt-20 antialiased`}>
         <Providers user={user}>
           <Header />
-          <main className="flex flex-1 items-center justify-center">{children}</main>
+          <main className="flex flex-1">{children}</main>
         </Providers>
       </body>
     </html>
