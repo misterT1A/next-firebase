@@ -1,30 +1,40 @@
-import { memo, type ReactElement } from 'react';
+import { Button, ButtonGroup } from '@mui/material';
+import { memo, useState, type ReactElement } from 'react';
+
+import { PageDirection } from '@/types/types';
 
 interface IProps {
-  prevHandler: () => void;
-  nextHandler: () => void;
+  setDirection: (direction: PageDirection) => void;
+  pages: number;
 }
 
-const Pagination = memo(function Pagination({ prevHandler, nextHandler }: IProps): ReactElement {
+const Pagination = memo(function Pagination({ setDirection, pages }: IProps): ReactElement {
+  const [page, setPage] = useState<number>(1);
+
+  const firstPage = page === 1;
+  const endPage = page === pages;
+
+  const handlePreviousClick = (): void => {
+    if (firstPage) return;
+    setDirection(PageDirection.PREV);
+    setPage((prev) => prev - 1);
+  };
+
+  const handleNextClick = (): void => {
+    if (endPage) return;
+    setDirection(PageDirection.NEXT);
+    setPage((prev) => prev + 1);
+  };
+
   return (
-    <ul className="flex gap-1">
-      <li
-        className={
-          'flex w-fit cursor-pointer items-center justify-center rounded-md bg-slate-400 p-2 text-black hover:bg-slate-600'
-        }
-        onClick={prevHandler}
-      >
-        Prev
-      </li>
-      <li
-        className={
-          'flex w-fit cursor-pointer items-center justify-center rounded-md bg-slate-400 p-2 text-black hover:bg-slate-600'
-        }
-        onClick={nextHandler}
-      >
-        Next
-      </li>
-    </ul>
+    <ButtonGroup variant="text" aria-label="Basic button group">
+      <Button onClick={handlePreviousClick} disabled={firstPage}>
+        Prev page
+      </Button>
+      <Button onClick={handleNextClick} disabled={endPage}>
+        Next page
+      </Button>
+    </ButtonGroup>
   );
 });
 

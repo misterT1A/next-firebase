@@ -45,7 +45,15 @@ const Header = (props: IProps): ReactElement => {
     <>
       <HideOnScroll {...props}>
         <AppBar>
-          <Toolbar sx={{ width: { sm: '100%' }, display: 'flex', justifyContent: 'space-between' }}>
+          <Toolbar
+            sx={{
+              maxWidth: '64rem',
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'space-between',
+              margin: 'auto',
+            }}
+          >
             <IconButton
               color="inherit"
               aria-label="open drawer"

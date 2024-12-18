@@ -125,19 +125,19 @@ const deleteUser = async (userId: string): Promise<void> => {
 };
 
 const updateUsers = (setState: Dispatch<SetStateAction<UserType[]>>): Unsubscribe => {
-  let isInitialLoad = true;
+  // const isInitialLoad = true;
 
   const collectionRef = collection(db, 'users');
   const dataQuery = query(collectionRef, orderBy('createdAt', SortEnum.ASC), limit(COUNT_USERS_ON_PAGE));
   const unsubscribe = onSnapshot(dataQuery, (snapshot) => {
-    if (!snapshot.metadata.hasPendingWrites) {
-      const users = buildUsers(snapshot.docs);
+    // if (!snapshot.metadata.hasPendingWrites) {
+    const users = buildUsers(snapshot.docs);
 
-      if (!isInitialLoad) {
-        setState(users);
-      }
-      isInitialLoad = false;
-    }
+    // if (!isInitialLoad) {
+    setState(users);
+    // }
+    // isInitialLoad = false;
+    // }
   });
 
   return unsubscribe;

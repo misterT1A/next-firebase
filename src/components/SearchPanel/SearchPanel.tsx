@@ -1,35 +1,49 @@
 'use client';
 
+import CancelIcon from '@mui/icons-material/Cancel';
+import SearchIcon from '@mui/icons-material/Search';
+import { Divider, IconButton, InputBase, Paper } from '@mui/material';
 import type { FormEvent, ReactElement } from 'react';
 import { useState } from 'react';
 
+import { getSearchUsers } from '@/services/firebaseServerActions';
+import type { UserType } from '@/types/types';
+
 interface IProps {
-  submitHandler: (query: string) => void;
+  setUsers: (users: UserType[]) => void;
 }
 
-const SearchPanel = ({ submitHandler }: IProps): ReactElement => {
+const SearchPanel = ({ setUsers }: IProps): ReactElement => {
   const [query, setQuery] = useState('');
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
 
-    submitHandler(query);
+    const [users] = await getSearchUsers(query);
+    setUsers(users);
+  };
+
+  const handleClear = (): void => {
+    setQuery('');
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-2">
-      <input
-        className='className="rounded-md text-black" bg-slate-600 p-1'
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
+    <Paper component="form" sx={{ p: '2px 4px', display: 'flex', alignItems: 'center' }} onSubmit={handleSubmit}>
+      <InputBase
+        sx={{ ml: 1, flex: 1 }}
         placeholder="Search user"
-        type="text"
+        value={query}
+        inputProps={{ 'aria-label': 'search user' }}
+        onChange={(e) => setQuery(e.target.value)}
       />
-
-      <button className="bg-slate-600 p-1" type="submit">
-        Search
-      </button>
-    </form>
+      <IconButton type="button" sx={{ p: '10px' }} aria-label="search" onClick={handleClear}>
+        <CancelIcon />
+      </IconButton>
+      <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+      <IconButton color="primary" sx={{ p: '10px' }} aria-label="directions" type="submit">
+        <SearchIcon />
+      </IconButton>
+    </Paper>
   );
 };
 

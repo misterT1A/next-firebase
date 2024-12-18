@@ -29,7 +29,7 @@ export default async function RootLayout({
       <body className={`${roboto.className} m-auto flex min-h-screen max-w-5xl flex-col pt-20 antialiased`}>
         <Providers user={user}>
           <Header />
-          <main className="flex flex-1">{children}</main>
+          <main className="flex w-full max-w-5xl flex-1">{children}</main>
         </Providers>
       </body>
     </html>

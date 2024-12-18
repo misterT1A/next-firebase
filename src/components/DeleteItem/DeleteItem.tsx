@@ -1,3 +1,4 @@
+import { Button } from '@mui/material';
 import type { ReactElement } from 'react';
 
 import { deleteUser } from '@/services/firebaseServerActions';
@@ -13,9 +14,9 @@ const DeleteItem = ({ id }: { id: string }): ReactElement => {
   };
 
   return (
-    <button onClick={handleDelete} className="rounded border bg-red-400 p-1 text-white hover:bg-red-900">
-      Delete Item
-    </button>
+    <Button onClick={handleDelete} variant="contained">
+      Delete
+    </Button>
   );
 };
 
