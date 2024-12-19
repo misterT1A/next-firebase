@@ -14,5 +14,5 @@ export const NOAUTH_LINKS = [
 ];
 export const AUTH_LINKS = [
   { title: 'Profile', href: '/profile' },
-  { title: 'Sign Out', href: '' },
+  { title: 'Sign Out', href: '/' },
 ];

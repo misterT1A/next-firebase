@@ -5,10 +5,14 @@ import { getCurrentUser } from '@/services/firebaseServerActions';
 import type { ParamsPage } from '@/types/types';
 
 const Edit = async ({ params }: { params: ParamsPage }): Promise<ReactElement> => {
-  const user = await getCurrentUser(params.slug);
-
+  const { slug } = await params;
+  const user = await getCurrentUser(slug);
   if (!user) return <h1>User not found</h1>;
-  return <EditForm initData={user} />;
+  return (
+    <section className="flex w-full justify-center">
+      <EditForm initData={user} />
+    </section>
+  );
 };
 
 export default Edit;

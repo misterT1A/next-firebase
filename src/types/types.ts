@@ -11,11 +11,15 @@ export type UserType = {
 export type UserForUpdateType = Omit<UserType, 'id' | 'time'>;
 export type UserForAddType = UserForUpdateType & { createdAt: FieldValue };
 
-export type ParamsPage = { slug: string };
+export type ParamsPage = { slug: string; searchParams: { [key: string]: string } };
 
 export enum SortEnum {
   ASC = 'asc',
   DESC = 'desc',
+}
+
+export function isSortEnum(value: string): value is SortEnum {
+  return Object.values(SortEnum).includes(value as SortEnum);
 }
 
 export enum PageDirection {

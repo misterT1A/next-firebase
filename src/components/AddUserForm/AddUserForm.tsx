@@ -1,7 +1,7 @@
 'use client';
 
-import { serverTimestamp } from '@firebase/firestore';
 import { Button, TextField, Typography } from '@mui/material';
+import { useRouter } from 'next/navigation';
 import type { FC, FormEvent, ReactElement } from 'react';
 import { useState } from 'react';
 
@@ -12,6 +12,7 @@ interface IProps {
 }
 
 const AddUserForm: FC<IProps> = ({ closeModal }): ReactElement => {
+  const router = useRouter();
   const [nameValue, setName] = useState('');
   const [ageValue, setAge] = useState('');
   const [descriptionValue, setdescription] = useState('');
@@ -28,7 +29,6 @@ const AddUserForm: FC<IProps> = ({ closeModal }): ReactElement => {
       name: nameValue.toLowerCase(),
       age: ageValue,
       description: descriptionValue.toLowerCase(),
-      createdAt: serverTimestamp(),
     };
 
     try {
@@ -37,9 +37,10 @@ const AddUserForm: FC<IProps> = ({ closeModal }): ReactElement => {
       setAge('');
       setdescription('');
       closeModal();
+      router.refresh();
       console.log('Adding user success');
-    } catch {
-      console.log('Error adding user');
+    } catch (err) {
+      console.log('Error adding user', err);
     }
   };
 

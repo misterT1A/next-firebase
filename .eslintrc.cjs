@@ -10,7 +10,7 @@ module.exports = {
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs', 'custom-formatter.js', 'tailwind.config.ts'],
   parser: '@typescript-eslint/parser',
-  plugins: ['prettier', 'react-refresh', 'react-compiler'],
+  plugins: ['prettier', 'react-refresh', 'unused-imports', 'react-compiler'],
   rules: {
     'no-case-declarations': 'off',
     'react-hooks/exhaustive-deps': 'off',
@@ -32,5 +32,14 @@ module.exports = {
         },
       },
     ],
+    'unused-imports/no-unused-imports': 'error',
+    // '@typescript-eslint/no-unused-vars': [
+    //   'warn',
+    //   {
+    //     argsIgnorePattern: '^',
+    //     varsIgnorePattern: '^',
+    //     caughtErrorsIgnorePattern: '^_',
+    //   },
+    // ],
   },
 };

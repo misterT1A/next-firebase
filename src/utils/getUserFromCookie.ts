@@ -7,7 +7,8 @@ import type { User } from '@/contexts/AuthContext';
 import { toUser } from './toUser';
 
 export async function getUserFromCookie(): Promise<User | null> {
-  const tokens = await getTokens(cookies(), {
+  const cookieStore = await cookies();
+  const tokens = await getTokens(cookieStore, {
     apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || '',
     cookieName: AUTH_COOKIE_NAME,
     cookieSignatureKeys: [process.env.COOKIE_SIGNATURE_KEYS || ''],

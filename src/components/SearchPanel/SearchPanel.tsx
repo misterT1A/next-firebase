@@ -3,28 +3,28 @@
 import CancelIcon from '@mui/icons-material/Cancel';
 import SearchIcon from '@mui/icons-material/Search';
 import { Divider, IconButton, InputBase, Paper } from '@mui/material';
+import { useRouter, useSearchParams } from 'next/navigation';
 import type { FormEvent, ReactElement } from 'react';
 import { useState } from 'react';
 
-import { getSearchUsers } from '@/services/firebaseServerActions';
-import type { UserType } from '@/types/types';
-
-interface IProps {
-  setUsers: (users: UserType[]) => void;
-}
-
-const SearchPanel = ({ setUsers }: IProps): ReactElement => {
+const SearchPanel = (): ReactElement => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [query, setQuery] = useState('');
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
 
-    const [users] = await getSearchUsers(query);
-    setUsers(users);
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set('query', query);
+    router.replace(`?${newParams.toString()}`);
   };
 
   const handleClear = (): void => {
     setQuery('');
+    const newParams = new URLSearchParams(searchParams);
+    newParams.delete('query');
+    router.replace(`?${newParams.toString()}`);
   };
 
   return (

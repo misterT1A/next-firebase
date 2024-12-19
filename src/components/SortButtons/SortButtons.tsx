@@ -1,29 +1,39 @@
 import { Button, Typography } from '@mui/material';
-import type { FC, ReactElement } from 'react';
-import React from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import type { ReactElement } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { getSortUsers } from '@/services/firebaseServerActions';
-import type { UserType } from '@/types/types';
 import { SortEnum } from '@/types/types';
 
-interface IProps {
-  setUsers: (users: UserType[]) => void;
-}
+// interface IProps {
+//   setUsers: (users: UserType[]) => void;
+// }
 
-const SortButtons: FC<IProps> = ({ setUsers }): ReactElement => {
-  const sortHandler = async (type: SortEnum): Promise<void> => {
-    const users = await getSortUsers(type);
-    setUsers(users);
+const SortButtons = (): ReactElement => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const [sort, setSort] = useState<SortEnum>(SortEnum.ASC);
+
+  useEffect(() => {
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set('sort', sort);
+    router.replace(`?${newParams.toString()}`);
+  }, [sort]);
+
+  const sortHandler = (sort: SortEnum): void => {
+    // const users = await getSortUsers(type);
+    // setUsers(users);
+    setSort(sort);
   };
 
   return (
     <div className="flex flex-col gap-2">
       <Typography>Sort by creation date</Typography>
       <div className="flex gap-2">
-        <Button variant="outlined" onClick={() => sortHandler(SortEnum.ASC)}>
+        <Button variant="outlined" onClick={() => sortHandler(SortEnum.ASC)} disabled={sort === SortEnum.ASC}>
           ASC
         </Button>
-        <Button variant="outlined" onClick={() => sortHandler(SortEnum.DESC)}>
+        <Button variant="outlined" onClick={() => sortHandler(SortEnum.DESC)} disabled={sort === SortEnum.DESC}>
           DESC
         </Button>
       </div>
