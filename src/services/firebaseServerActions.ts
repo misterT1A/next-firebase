@@ -30,12 +30,10 @@ const getUsers = async (queryParam: string, sortParam: string): Promise<[UserTyp
   const collectionRef = collection(db, 'users');
 
   let q;
-  console.log('fetch');
+
   const order = isSortEnum(sortParam)
     ? orderBy('createdAt', sortParam as SortEnum)
     : orderBy('createdAt', SortEnum.ASC);
-
-  // const limitUsers = limit(COUNT_USERS_ON_PAGE);
 
   if (queryParam) {
     const searchValueAfter = where('name', '>=', queryParam);

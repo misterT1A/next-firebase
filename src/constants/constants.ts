@@ -3,7 +3,7 @@ export const COUNT_USERS_ON_PAGE = 6;
 export const AUTH_COOKIE_NAME = 'AuthToken';
 
 export const NAV_ITEMS = [
-  { title: 'Main', href: '/' },
+  { title: 'Home', href: '/' },
   { title: 'About', href: '/about' },
 ];
 

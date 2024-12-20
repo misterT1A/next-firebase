@@ -19,7 +19,7 @@ const Providers = ({ children, user }: ProviderProps): ReactNode => {
         {children}
         <ToastContainer
           position="bottom-right"
-          autoClose={5000}
+          autoClose={3000}
           hideProgressBar={false}
           newestOnTop
           closeOnClick
