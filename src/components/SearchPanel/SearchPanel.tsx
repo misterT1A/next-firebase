@@ -5,7 +5,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { Divider, IconButton, InputBase, Paper } from '@mui/material';
 import { useRouter, useSearchParams } from 'next/navigation';
 import type { FormEvent, ReactElement } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const SearchPanel = (): ReactElement => {
   const router = useRouter();
@@ -26,6 +26,13 @@ const SearchPanel = (): ReactElement => {
     newParams.delete('query');
     router.replace(`?${newParams.toString()}`);
   };
+
+  useEffect(() => {
+    const value = searchParams.get('query');
+    if (value) {
+      setQuery(value);
+    }
+  }, []);
 
   return (
     <Paper component="form" sx={{ p: '2px 4px', display: 'flex', alignItems: 'center' }} onSubmit={handleSubmit}>

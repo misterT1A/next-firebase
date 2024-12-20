@@ -1,3 +1,5 @@
+'use client';
+
 import CancelIcon from '@mui/icons-material/Cancel';
 import { Backdrop, Box, Button, Fade, IconButton, Modal, Stack } from '@mui/material';
 import type { ReactElement } from 'react';

@@ -27,12 +27,17 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
       clientEmail: process.env.SERVICE_ACCOUNT_CLIENT_EMAIL || '',
       privateKey: (process.env.SERVICE_ACCOUNT_PRIVATE_KEY || '').replace(/\\n/g, '\n'),
     },
-    handleValidToken: async () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    handleValidToken: async ({ token, decodedToken }, headers) => {
       if (REDIRECT_PATHS.includes(request.nextUrl.pathname)) {
         return redirectToHome(request);
       }
-
-      return NextResponse.next();
+      // const requestHeaders = new Headers(request.headers);
+      return NextResponse.next({
+        request: {
+          headers,
+        },
+      });
     },
     handleInvalidToken: async (reason) => {
       console.info('Missing or malformed credentials', { reason });

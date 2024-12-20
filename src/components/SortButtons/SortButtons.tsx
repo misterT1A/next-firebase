@@ -1,13 +1,11 @@
+'use client';
+
 import { Button, Typography } from '@mui/material';
 import { useRouter, useSearchParams } from 'next/navigation';
 import type { ReactElement } from 'react';
 import React, { useEffect, useState } from 'react';
 
 import { SortEnum } from '@/types/types';
-
-// interface IProps {
-//   setUsers: (users: UserType[]) => void;
-// }
 
 const SortButtons = (): ReactElement => {
   const searchParams = useSearchParams();
@@ -21,8 +19,6 @@ const SortButtons = (): ReactElement => {
   }, [sort]);
 
   const sortHandler = (sort: SortEnum): void => {
-    // const users = await getSortUsers(type);
-    // setUsers(users);
     setSort(sort);
   };
 

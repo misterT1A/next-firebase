@@ -5,7 +5,6 @@ export const AUTH_COOKIE_NAME = 'AuthToken';
 export const NAV_ITEMS = [
   { title: 'Main', href: '/' },
   { title: 'About', href: '/about' },
-  { title: 'Other', href: '/' },
 ];
 
 export const NOAUTH_LINKS = [
